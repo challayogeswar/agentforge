@@ -158,14 +158,14 @@ You now have a fully working, validated system!
 
 ## Troubleshooting (Most Common Issues & Fixes)
 
-| Issue | Solution |
+| Issue                      | Solution |
 |----------------------------|----------------------------------------------------------------------------------|
-| `ModuleNotFoundError`      | Re-run `pip install -r requirements.txt` inside the activated venv               |
+| `ModuleNotFoundError`      | Re-run `pip install -r requirements.txt` inside the activated venv                    |
 | `GEMINI_API_KEY not found` | Re-run the export/set command and restart your terminal                          |
-| `429 Quota exceeded`       | Wait 60 seconds (free tier = 15 requests/minute)                                 |
+| `429 Quota exceeded`       | Wait 60 seconds (free tier = 15 requests/minute)                           |
 | `database is locked`       | Close all Python processes → delete `data/memory/sessions.db` → run `python setup.py` again |
-| ChromaDB errors            | `pip install chromadb==0.4.18 --force-reinstall`                                 |
-| Jupyter imports fail       | `pip install ipykernel` → `python -m ipykernel install --user --name=agentforge` |
+| ChromaDB errors            | `pip install chromadb==0.4.18 --force-reinstall`                |
+| Jupyter imports fail       | `pip install ipykernel` → `python -m ipykernel install --user --name=agentforge`         |
 
 ---
 
@@ -205,11 +205,4 @@ All under MIT / Apache 2.0 / BSD → fully commercial-friendly.
 
 ---
 
-## Final Checklist Before Submission
-`python setup.py` runs without error
-`pytest tests/ -v` → 20/20 passed
-`examples/basic_usage.py` shows all 3 agents working
-Kaggle notebook runs end-to-end with your secret key
-Total cost = $0
-
-If all are checked → You are 100% ready for submission! 🎉
+If all are checked → You are 100% ready ! 🎉
