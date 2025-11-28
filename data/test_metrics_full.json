@@ -1,0 +1,54 @@
+{
+  "tests": [
+    {
+      "module": "PromptOptimizerAgent",
+      "test_name": "Prompt Optimizer",
+      "start_time": 1764320891.1626132,
+      "status": "PASS",
+      "duration": 9.139322757720947,
+      "error": null
+    },
+    {
+      "module": "ContentRewriterAgent",
+      "test_name": "Content Rewriter",
+      "start_time": 1764320900.301936,
+      "status": "PASS",
+      "duration": 9.452740669250488,
+      "error": null
+    },
+    {
+      "module": "EmailPrioritizerAgent",
+      "test_name": "Email Prioritizer",
+      "start_time": 1764320909.7546766,
+      "status": "PASS",
+      "duration": 6.643957138061523,
+      "error": null
+    }
+  ],
+  "summary": {
+    "total_tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "success_rate": 100.0,
+    "avg_duration": 8.41,
+    "total_duration": 25.24,
+    "by_module": {
+      "PromptOptimizerAgent": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0
+      },
+      "ContentRewriterAgent": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0
+      },
+      "EmailPrioritizerAgent": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0
+      }
+    }
+  },
+  "timestamp": 1764320916.3996325
+}

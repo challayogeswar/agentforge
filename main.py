@@ -122,6 +122,7 @@ def build_agents(user_id: str = "agentforge_user"):
     from src.agents.content_optimizer import ContentRewriterAgent
     from src.agents.email_prioritizer import EmailPrioritizerAgent
 
+
     agents = {
         "PromptOptimizerAgent": PromptOptimizerAgent(user_id),
         "ContentRewriterAgent": ContentRewriterAgent(user_id),
@@ -336,7 +337,7 @@ Subject: Interview next week - preparation materials"""
         status = "[PASS]" if success else "[FAIL]"
         print(f"{status}: {test_name}")
     
-    print(f"\nTotal: {summary['passed']}/{summary['total']} tests passed")
+    print(f"\nTotal: {summary['passed']}/{summary['total_tests']} tests passed")
     print(f"Success Rate: {summary['success_rate']}%")
     print(f"Total Duration: {summary['total_duration']}s")
     print(f"Average Duration per Test: {summary['avg_duration']}s")

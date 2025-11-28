@@ -96,7 +96,7 @@ You are permitted to:
 - ✅ Use in paid products and services
 - ✅ Create proprietary extensions
 - ✅ Distribute modified versions (under CC BY-SA 4.0)
-- ✅ Use in enterprise environments
+- ✅ Use in large-scale environments
 
 You must:
 - 📝 Provide attribution to original creator
@@ -122,6 +122,6 @@ Q: Do I need to open-source my modifications?
 A: Only if you distribute them.
 
 Q: What about the API key and costs?
-A: Gemini 2.0 Flash free tier ($0) from Google.
+A: Gemini 2.5 free tier ($0) from Google.
 
 ---

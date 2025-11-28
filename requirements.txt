@@ -12,10 +12,8 @@ rich
 pytest
 spacy
 nltk
-rake-nltk
 matplotlib
 plotly
-langgraph
 scikit-learn
 rake-nltk
 beautifulsoup4

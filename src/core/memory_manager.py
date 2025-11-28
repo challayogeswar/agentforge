@@ -1,4 +1,5 @@
-"""Memory manager with an optional ChromaDB-backed store.
+"""
+Memory manager with an optional ChromaDB-backed store.
 
 If `chromadb` and `sentence-transformers` are available they will be used
 for semantic storage; otherwise the module falls back to SQLite-only with a
@@ -34,7 +35,10 @@ class _InMemoryCollection:
     def query(self, query_texts=None, n_results=5, include=None):
         # Very naive: return most recent documents
         docs = [d["document"] for d in self._docs][-n_results:][::-1]
-        return {"documents": [docs], "metadatas": [[d["metadata"] for d in self._docs][-n_results:][::-1]]}
+        return {
+            "documents": [docs],
+            "metadatas": [[d["metadata"] for d in self._docs][-n_results:][::-1]]
+        }
 
 
 class MemoryManager:
@@ -58,7 +62,9 @@ class MemoryManager:
         if _HAVE_CHROMA:
             try:
                 self.chroma = PersistentClient(path=Config.VECTOR_DB_PATH)
-                self.embedding_fn = SentenceTransformerEmbeddingFunction(model_name=Config.EMBEDDING_MODEL)
+                self.embedding_fn = SentenceTransformerEmbeddingFunction(
+                    model_name=Config.EMBEDDING_MODEL
+                )
                 self.collection = self.chroma.get_or_create_collection(
                     name="long_term_memory",
                     embedding_function=self.embedding_fn
@@ -80,7 +86,11 @@ class MemoryManager:
         try:
             self.collection.add(
                 documents=[content],
-                metadatas=[{"role": role, "user_id": self.user_id, "timestamp": datetime.now().isoformat()}],
+                metadatas=[{
+                    "role": role,
+                    "user_id": self.user_id,
+                    "timestamp": datetime.now().isoformat()
+                }],
                 ids=[f"{self.user_id}_{datetime.now().timestamp()}"]
             )
         except Exception:
@@ -105,3 +115,14 @@ class MemoryManager:
             return results["documents"][0] if results.get("documents") else []
         except Exception:
             return []
+
+    def rag_query(self, user_query: str, k: int = 3) -> str:
+        """RAG: Retrieve relevant context and augment response"""
+        # 1. Semantic search
+        results = self.semantic_search(user_query, n_results=k)
+
+        # 2. Format context
+        context = "\n".join([f"- {doc}" for doc in results]) if results else "(no relevant context found)"
+
+        # 3. Return augmented prompt
+        return f"Context from memory:\n{context}\n\nUser query: {user_query}"

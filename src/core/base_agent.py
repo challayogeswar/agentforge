@@ -1,44 +1,165 @@
-# src/core/base_agent.py
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
-from src.core.llm import get_llm
-from src.core.observability import trace_agent_call
-from src.core.memory_manager import MemoryManager
-from typing import List, Dict, Any
+from __future__ import annotations
 
-class BaseAgent:
-    def __init__(self, name: str, role_instructions: str, user_id: str = "default_user"):
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+from langchain_core.messages import SystemMessage, HumanMessage, BaseMessage
+
+__all__ = ["BaseAgent", "BaseAgentConfig"]
+
+
+try:
+    import structlog
+
+    logger = structlog.get_logger(__name__)
+except Exception:  # pragma: no cover
+    logger = None  # fallback if structlog is not available
+
+
+# Try to import centralized tracing; fall back to a no-op if not available
+try:
+    from src.observability.tracing import trace_agent_call  # type: ignore
+except Exception:  # pragma: no cover
+    def trace_agent_call(**kwargs: Any) -> None:  # type: ignore
+        return
+
+
+@dataclass
+class BaseAgentConfig:
+    system_prompt: str
+    llm: Any
+    memory: Any
+    tools: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class BaseAgent(ABC):
+    def __init__(
+        self,
+        agent_id: str,
+        name: str,
+        description: str,
+        capabilities: Optional[List[str]],
+        config: BaseAgentConfig,
+    ) -> None:
+        self.agent_id = agent_id
         self.name = name
-        self.role_instructions = role_instructions
-        self.llm = get_llm()
-        self.memory = MemoryManager(user_id)
-        
-        # Agent Identity (Pillar 1 satisfied)
-        self.system_prompt = f"""You are {name}, a specialized AI agent part of AgentForge Productivity Suite.
-{role_instructions}
+        self.description = description
+        self.capabilities = capabilities or []
+        self.config = config
 
-Rules:
-- Always stay in character.
-- Never reveal you are an AI or break the fourth wall.
-- Be helpful, concise, and professional.
-- If you need another agent, say exactly: "ROUTING TO: [AgentName]" on a new line.
-"""
+        self.llm = config.llm
+        self.memory = config.memory
+        self.tools = config.tools
+        self.metadata = config.metadata
 
-    def run(self, user_input: str) -> str:
-        # Retrieve recent context
-        context = self.memory.get_recent_context()
+        self.system_prompt: str = config.system_prompt
 
-        messages = [SystemMessage(content=self.system_prompt)]
-        if context:
-            messages.append(SystemMessage(content="Previous conversation:\n" + context))
-        messages.append(HumanMessage(content=user_input))
+        if logger is not None:
+            logger.info(
+                "agent_initialized",
+                agent_id=self.agent_id,
+                name=self.name,
+                capabilities=self.capabilities,
+            )
 
-        response = self.llm.invoke(messages).content
+    @abstractmethod
+    def execute(
+        self,
+        task: str,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Implement the core logic of the agent.
 
-        # Log everything beautifully
-        trace_agent_call(self.name, user_input, response)
+        Should return a dict like:
+        {
+            "output": <str or structured result>,
+            "metadata": {...}
+        }
+        """
+        raise NotImplementedError
 
-        # Save to memory
-        self.memory.add_exchange("human", user_input)
-        self.memory.add_exchange("assistant", response)
+    def _build_messages(
+        self,
+        user_input: str,
+        extra_context: Optional[Dict[str, Any]] = None,
+    ) -> List[BaseMessage]:
+        rag_augmented = self.memory.rag_query(user_input)
+        recent_context = self.memory.get_recent_context()
+
+        messages: List[BaseMessage] = [SystemMessage(content=self.system_prompt)]
+
+        if recent_context:
+            messages.append(
+                SystemMessage(
+                    content="Previous conversation:\n" + str(recent_context)
+                )
+            )
+
+        if extra_context:
+            messages.append(
+                SystemMessage(content="Extra context:\n" + str(extra_context))
+            )
+
+        messages.append(HumanMessage(content=rag_augmented))
+        return messages
+
+    def run(
+        self,
+        user_input: str,
+        extra_context: Optional[Dict[str, Any]] = None,
+    ) -> str:
+        """
+        High-level entrypoint used by the CLI / router.
+
+        - Retrieves semantic + recent context from memory (RAG).
+        - Builds an augmented prompt for the LLM.
+        - Invokes the LLM safely.
+        - Logs and persists the exchange.
+        """
+        messages = self._build_messages(user_input=user_input, extra_context=extra_context)
+
+        try:
+            response_obj = self.llm.invoke(messages)
+            response = (
+                response_obj.content
+                if hasattr(response_obj, "content")
+                else str(response_obj)
+            )
+        except Exception as e:  # pragma: no cover
+            response = f"(Error invoking LLM: {e})"
+            if logger is not None:
+                logger.error(
+                    "agent_llm_error",
+                    agent_id=self.agent_id,
+                    name=self.name,
+                    error=str(e),
+                )
+
+        try:
+            recent_context = self.memory.get_recent_context()
+        except Exception:  # pragma: no cover
+            recent_context = None
+
+        trace_agent_call(
+            agent_name=self.name,
+            agent_id=self.agent_id,
+            user_input=user_input,
+            response=response,
+            context=recent_context,
+            system_prompt=self.system_prompt,
+        )
+
+        try:
+            self.memory.add_exchange("user", user_input)
+            self.memory.add_exchange("assistant", response)
+        except Exception:  # pragma: no cover
+            if logger is not None:
+                logger.warning(
+                    "agent_memory_write_failed",
+                    agent_id=self.agent_id,
+                    name=self.name,
+                )
 
         return response

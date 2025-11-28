@@ -99,7 +99,7 @@ Follow this sequence for optimal understanding:
 
 | Layer     | Technologies                            |
 |-----------|-----------------------------------------|
-| LLM       | Google Gemini 1.5 Flash (Free Tier)     |
+| LLM       | Google Gemini 2.5 Flash (Free Tier)     |
 | Framework | LangChain + Custom Agent System         |
 | Memory    | ChromaDB (Vector) + SQLite (Relational) |
 | NLP       | spaCy + NLTK + Sentence Transformers    |

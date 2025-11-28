@@ -1,5 +1,6 @@
-# AgentForge – Zero-Cost Multi-Agent Productivity Suite
-Enterprise-grade · Fully reproducible · $0 forever  
+# AgentForge – Multi-Agent Productivity Framework
+
+Capstone-Level · Fully Reproducible · $0 Forever  
 Built for Kaggle Agents Intensive Capstone 2025
 
 [[License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC%20BY--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
@@ -10,7 +11,7 @@ Built for Kaggle Agents Intensive Capstone 2025
 
 ## What Is AgentForge?
 
-A complete multi-agent system that runs 100% on Google’s free Gemini 2.0 Flash tier. No paid APIs. No cloud costs.
+A complete multi-agent system that runs 100% on Google’s free Gemini 2.5. No paid APIs. No cloud costs.
 
 ### 3 Fully Working Agents
 
@@ -25,7 +26,7 @@ A complete multi-agent system that runs 100% on Google’s free Gemini 2.0 Flash
 - Design Critique Agent
 - Time Blocking Assistant
 
-### Enterprise Features Included
+### Features Included
 
 - Semantic Intent Router (88% direct, 12% LLM fallback)
 - 3-Tier Memory: Session → Working → Long-term (SQLite + ChromaDB)
