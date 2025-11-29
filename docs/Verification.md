@@ -6,7 +6,7 @@ Issue Date: November 26, 2025
 
 ---
 
-Project Name: AgentForge – Multi-Agent Productivity Suite  
+Project Name: AgentForge – Multi-Agent AI System
 Version: 1.0.0
 Developer: [challa yogeswar]  
 Repository: https://github.com/challayogeswar/agentforge  
