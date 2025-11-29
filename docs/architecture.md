@@ -353,7 +353,7 @@ AgentForge demonstrates a production-ready multi-agent system that:
 4. Evaluates rigorously using automated quality metrics
 5. Scales horizontally with modular architecture
 
-All diagrams verified to render on: GitHub · Kaggle · VS Code Markdown Preview
+All diagrams verified to render on: GitHub 
 
 ---
 
