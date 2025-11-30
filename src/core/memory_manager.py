@@ -1,5 +1,5 @@
 """
-Memory manager with an optional ChromaDB-backed store.
+Memory manager with optional ChromaDB-backed store.
 
 If `chromadb` and `sentence-transformers` are available they will be used
 for semantic storage; otherwise the module falls back to SQLite-only with a
@@ -35,9 +35,10 @@ class _InMemoryCollection:
     def query(self, query_texts=None, n_results=5, include=None):
         # Very naive: return most recent documents
         docs = [d["document"] for d in self._docs][-n_results:][::-1]
+        metas = [d["metadata"] for d in self._docs][-n_results:][::-1]
         return {
             "documents": [docs],
-            "metadatas": [[d["metadata"] for d in self._docs][-n_results:][::-1]]
+            "metadatas": [metas]
         }
 
 
@@ -70,7 +71,6 @@ class MemoryManager:
                     embedding_function=self.embedding_fn
                 )
             except Exception:
-                # Something failed during chroma setup; fall back
                 self.collection = _InMemoryCollection()
         else:
             self.collection = _InMemoryCollection()
@@ -94,7 +94,6 @@ class MemoryManager:
                 ids=[f"{self.user_id}_{datetime.now().timestamp()}"]
             )
         except Exception:
-            # swallow errors for environments without chroma
             pass
 
     def get_recent_context(self, limit: int = 8) -> str:
@@ -116,13 +115,12 @@ class MemoryManager:
         except Exception:
             return []
 
-    def rag_query(self, user_query: str, k: int = 3) -> str:
-        """RAG: Retrieve relevant context and augment response"""
-        # 1. Semantic search
+    def rag_query(self, user_query: str, k: int = 3) -> Dict[str, Any]:
+        """RAG: Retrieve relevant context and return structured provenance."""
         results = self.semantic_search(user_query, n_results=k)
-
-        # 2. Format context
         context = "\n".join([f"- {doc}" for doc in results]) if results else "(no relevant context found)"
-
-        # 3. Return augmented prompt
-        return f"Context from memory:\n{context}\n\nUser query: {user_query}"
+        return {
+            "retrieved_docs": results,
+            "formatted_context": context,
+            "user_query": user_query,
+        }
