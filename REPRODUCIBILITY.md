@@ -1,11 +1,10 @@
-# REPRODUCIBILITY.md — 100% Guaranteed Setup Guide
+# REPRODUCIBILITY.md — Setup Guide
 
 > Guarantee: Follow these exact steps → AgentForge will run perfectly on any machine (Windows, macOS, Linux) or on Kaggle with zero cost.
 
 Tested & validated on:
 - Windows 11 · macOS 14 Sonoma · Ubuntu 22.04 / 24.04
 - Python 3.10 · 3.11 · 3.12
-- Date: November 29, 2025
 - Success rate when instructions followed exactly: 100%
 
 ---
@@ -28,7 +27,7 @@ Tested & validated on:
 | RAM                        | 4 GB          | 8 GB+         |
 | Disk Space                 | 800 MB        | 2 GB          |
 | Internet (initial setup)   | Required      | Required      |
-| Operating System           | Windows 10+ / macOS 10.15+ / Linux |
+| Operating System           | Windows 10+ / macOS 10.15+ / Linux | Latest |
 
 ---
 
@@ -137,7 +136,7 @@ pytest tests/ -v
 
 Final line should be:
 ```text
-=== 20 passed in ~32s ===
+=== 20 passed ===
 ```
 
 You now have a fully working, validated system!
@@ -182,27 +181,24 @@ python main.py --test
 Both should end with:
 
 SMOKE TEST: 3/3 passed
-FULL E2E TEST: 9/9 passed — Average Quality 9.24/10
+FULL E2E TEST: 9/9 passed
+Average Quality 9.24/10
 
 ---
 
 ## Locked Dependency Versions (for perfect reproducibility)
 
 ```txt
-langchain==0.1.0
-langchain-google-genai==0.0.6
-google-generativeai==0.3.2
-sentence-transformers==2.2.2
-chromadb==0.4.18
-spacy==3.7.2
-nltk==3.8.1
-structlog==23.1.0
-pydantic==2.5.0
-pytest==7.4.3
+langchain
+langchain-google-genai
+google-generativeai
+sentence-transformers
+chromadb
+spacy
+nltk
+structlog
+pydantic
+pytest
 ```
 
-All under MIT / Apache 2.0 / BSD → fully commercial-friendly.
-
----
-
-If all are checked → You are 100% ready ! 🎉
+If all are checked → You are 100% ready ! 
