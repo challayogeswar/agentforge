@@ -36,7 +36,7 @@ This hub organizes all technical and operational documentation into clear catego
 | Setup        | [REPRODUCIBILITY.md](../REPRODUCIBILITY.md) | 100% guaranteed setup guide               |
 | Licensing    | [LICENSES.md](../LICENSES.md)      | Full dependency licenses + commercial use      |
 | Architecture | [architecture.md](architecture.md) | System diagrams + component breakdown          |
-| Testing      | [test_report.md](test_report.md)   | 20/20 test results + performance metrics       |
+| Testing      | [Completion_And_Validation.md](Completion_And_Validation.md)   | 20/20 test results + performance metrics       |
 | Verification | [verification.md](verification.md) | Completion certificate + checklist             |
 
 ---
@@ -79,7 +79,7 @@ AgentForge implements 5 key agentic concepts:
 
 ---
 
-## 📊 Performance Metrics (Nov 2025)
+## 📊 Performance Metrics
 
 | Metric                  | Value             |
 |-------------------------|-------------------|
@@ -137,7 +137,7 @@ textagentforge/
 
 - License: CC BY-SA 4.0  
 - Commercial use allowed · Modifications must be shared alike  
-- All 35 dependencies use permissive licenses (MIT, Apache 2.0, BSD)  
+- All dependencies use permissive licenses (MIT, Apache 2.0, BSD)  
 - Top dependencies:
   - LangChain 0.1.0 (MIT)  
   - Google Gemini API (Apache 2.0)  
@@ -159,28 +159,17 @@ textagentforge/
 ### Advanced Topics
 
 - Agent-to-Agent Protocol → See Diagram 2 in [architecture.md](architecture.md) 
-- Quality Evaluation Framework → See Section 3 in [test_report.md](test_report.md)
-
----
-
-## 🧑‍💻 Documentation Standards
-
-- ✅ Clear formatting  
-- ✅ Code examples and working demos  
-- ✅ Diagrams for complex concepts  
-- ✅ Tested commands only  
-- ✅ Update status tables when contributing  
+- Quality Evaluation Framework → See Section 3 in [test_report.md](test_report.md) 
 
 ---
 
 ## 🆘 Support & Community
 
 - Issues: [GitHub Issues](https://github.com/challayogeswar/agentforge/docs)  
-- Live Demo: [Kaggle Notebook]()
 
 ---
 
-## Project At a Glance
+## At a Glance
 
 - Built For: Kaggle Agents Intensive Capstone 2025  
 - Documentation Version: v1.0.0  
