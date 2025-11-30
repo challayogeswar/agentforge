@@ -3,6 +3,7 @@ from langgraph.graph import StateGraph, END
 from typing import TypedDict, Annotated
 from langchain_core.messages import AnyMessage, HumanMessage
 import operator
+import time
 
 from src.agents.prompt_optimizer import PromptOptimizerAgent
 from src.agents.content_optimizer import ContentRewriterAgent
@@ -13,6 +14,7 @@ from src.core.mcp_interface import tools
 class AgentState(TypedDict):
     messages: Annotated[list[AnyMessage], operator.additem]
     next_agent: str
+    metadata: dict
 
 # ---- Initialize Agents ----
 prompt_agent = PromptOptimizerAgent()
@@ -46,8 +48,9 @@ graph.add_node(
     "PromptOptimizerAgent",
     lambda state: {
         "messages": [
-            HumanMessage(content=prompt_agent.run(state["messages"][-1].content))
-        ]
+            HumanMessage(content=prompt_agent.execute(state["messages"][-1].content)["output"])
+        ],
+        "metadata": {"agent": "PromptOptimizerAgent"}
     },
 )
 
@@ -56,8 +59,9 @@ graph.add_node(
     "ContentRewriterAgent",
     lambda state: {
         "messages": [
-            HumanMessage(content=rewriter_agent.run(state["messages"][-1].content))
-        ]
+            HumanMessage(content=rewriter_agent.execute(state["messages"][-1].content)["output"])
+        ],
+        "metadata": {"agent": "ContentRewriterAgent"}
     },
 )
 
@@ -66,18 +70,18 @@ graph.add_node(
     "EmailPrioritizerAgent",
     lambda state: {
         "messages": [
-            HumanMessage(content=email_agent.run(state["messages"][-1].content))
-        ]
+            HumanMessage(content=email_agent.execute(state["messages"][-1].content)["output"])
+        ],
+        "metadata": {"agent": "EmailPrioritizerAgent"}
     },
 )
 
 # ---- Entry Point & Routing ----
 graph.set_entry_point("supervisor")
 
-# Conditional edges from supervisor to agents
 graph.add_conditional_edges(
     "supervisor",
-    lambda state: state["next_agent"],  # use supervisor_node result
+    lambda state: state["next_agent"],
     {
         "PromptOptimizerAgent": "PromptOptimizerAgent",
         "ContentRewriterAgent": "ContentRewriterAgent",
@@ -94,8 +98,24 @@ graph.add_edge("EmailPrioritizerAgent", END)
 app = graph.compile()
 
 # ---- Integration Helper ----
-def run_agent_pipeline(user_input: str):
+def run_agent_pipeline(user_input: str) -> dict:
     """Unified entry point for main system integration."""
-    initial_state: AgentState = {"messages": [HumanMessage(content=user_input)], "next_agent": ""}
+    start = time.time()
+    initial_state: AgentState = {
+        "messages": [HumanMessage(content=user_input)],
+        "next_agent": "",
+        "metadata": {}
+    }
     result_state = app.invoke(initial_state)
-    return result_state["messages"][-1].content
+
+    latency_ms = round((time.time() - start) * 1000, 2)
+    agent_used = result_state.get("metadata", {}).get("agent", "unknown")
+
+    return {
+        "output": result_state["messages"][-1].content,
+        "metadata": {
+            "agent": agent_used,
+            "latency_ms": latency_ms,
+            "input": user_input
+        }
+    }
