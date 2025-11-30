@@ -62,17 +62,21 @@ class TestEmailPrioritizer:
 
 Rank by urgency, provide urgency scores, and recommend action."""
             
-            result = self.router.route_request(user_input, user_id="test_user")
+            # Route to correct agent and run it
+            agent_name = self.router.route(user_input)
+            assert agent_name == "EmailPrioritizerAgent", f"Expected EmailPrioritizerAgent, got {agent_name}"
+            agent = EmailPrioritizerAgent()
+            result = agent.run(user_input)
             
             duration = time.time() - start_time
             
             # Validate response
-            assert result is not None, "Router returned None"
-            assert isinstance(result, dict), "Response should be dict"
+            assert result is not None, "Agent returned None"
+            assert isinstance(result, str), "Response should be a string"
             
             # Estimate tokens
             input_tokens = estimate_tokens(email_text)
-            output_tokens = estimate_tokens(result.get('response', ''))
+            output_tokens = estimate_tokens(result)
             
             quality_score = generate_quality_score()
             
@@ -86,7 +90,7 @@ Rank by urgency, provide urgency scores, and recommend action."""
                 status="PASS"
             )
             
-            response_text = result.get('response', '').lower()
+            response_text = result.lower()
             
             # Verify key aspects are identified
             assert any(keyword in response_text for keyword in ['urgent', 'critical', 'priority']), \
@@ -140,17 +144,21 @@ Rank by urgency, provide urgency scores, and recommend action."""
 
 Pay special attention to deadlines and time markers."""
             
-            result = self.router.route_request(user_input, user_id="test_user")
+            # Route to correct agent and run it
+            agent_name = self.router.route(user_input)
+            assert agent_name == "EmailPrioritizerAgent", f"Expected EmailPrioritizerAgent, got {agent_name}"
+            agent = EmailPrioritizerAgent()
+            result = agent.run(user_input)
             
             duration = time.time() - start_time
             
             # Validate response
-            assert result is not None, "Router returned None"
-            assert isinstance(result, dict), "Response should be dict"
+            assert result is not None, "Agent returned None"
+            assert isinstance(result, str), "Response should be a string"
             
             # Estimate tokens
             input_tokens = estimate_tokens(email_text)
-            output_tokens = estimate_tokens(result.get('response', ''))
+            output_tokens = estimate_tokens(result)
             
             quality_score = generate_quality_score()
             
@@ -164,7 +172,7 @@ Pay special attention to deadlines and time markers."""
                 status="PASS"
             )
             
-            response_text = result.get('response', '').lower()
+            response_text = result.lower()
             
             # Verify deadline awareness
             assert any(keyword in response_text for keyword in ['deadline', 'eod', 'tomorrow', 'urgent']), \
@@ -218,17 +226,21 @@ Pay special attention to deadlines and time markers."""
 
 Identify critical alerts vs marketing spam."""
             
-            result = self.router.route_request(user_input, user_id="test_user")
+            # Route to correct agent and run it
+            agent_name = self.router.route(user_input)
+            assert agent_name == "EmailPrioritizerAgent", f"Expected EmailPrioritizerAgent, got {agent_name}"
+            agent = EmailPrioritizerAgent()
+            result = agent.run(user_input)
             
             duration = time.time() - start_time
             
             # Validate response
-            assert result is not None, "Router returned None"
-            assert isinstance(result, dict), "Response should be dict"
+            assert result is not None, "Agent returned None"
+            assert isinstance(result, str), "Response should be a string"
             
             # Estimate tokens
             input_tokens = estimate_tokens(email_text)
-            output_tokens = estimate_tokens(result.get('response', ''))
+            output_tokens = estimate_tokens(result)
             
             quality_score = generate_quality_score()
             
@@ -242,11 +254,11 @@ Identify critical alerts vs marketing spam."""
                 status="PASS"
             )
             
-            response_text = result.get('response', '').lower()
+            response_text = result.lower()
             
-            # Verify spam filtering
+            # Verify spam filtering + critical alert detection
             assert any(keyword in response_text for keyword in ['spam', 'critical', 'database']) or \
-                   'critical alert' in response_text.lower(), \
+                   'critical alert' in response_text, \
                 "Should identify critical alert and filter spam"
             
             print(f"\n✓ Test 3 PASSED: Spam Filtering with Critical Alert")
