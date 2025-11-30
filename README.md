@@ -165,7 +165,7 @@ textagentforge/
 
 ## 🆘 Support & Community
 
-- Issues: [GitHub Issues](https://github.com/challayogeswar/agentforge/docs)  
+- Issues: [GitHub Issues]([https://github.com/challayogeswar/agentforge/doc](https://github.com/challayogeswar/agentforge/tree/main/docs))
 
 ---
 
