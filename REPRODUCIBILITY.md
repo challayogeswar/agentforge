@@ -201,4 +201,4 @@ pydantic
 pytest
 ```
 
-If all are checked → You are 100% ready ! 
+If all are checked → You are 100% ready !

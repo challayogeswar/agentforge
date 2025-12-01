@@ -152,13 +152,13 @@ textagentforge/
 
 1. [REPRODUCIBILITY.md](../REPRODUCIBILITY.md) – Get it running  
 2. [architecture.md](architecture.md) – Understand the system  
-3. [test_report.md](completetion_and_vadilation.md) – See performance  
+3. [completetion_and_vadilation.md](completetion_and_vadilation.md) – See performance  
 4. [LICENSES.md](../LICENSES.md) – Legal & commercial use  
 
 ### Advanced Topics
 
 - Agent-to-Agent Protocol → See Diagram 2 in [architecture.md](architecture.md) 
-- Quality Evaluation Framework → See Section 3 in [test_report.md](completetion_and_validatio.md) 
+- Quality Evaluation Framework → See Section 3 in [completetion_and_vadilation.md](completetion_and_validatio.md) 
 
 ---
 
