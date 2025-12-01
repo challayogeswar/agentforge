@@ -36,7 +36,7 @@ This hub organizes all technical and operational documentation into clear catego
 | Setup        | [REPRODUCIBILITY.md](REPRODUCIBILITY.md) | 100% guaranteed setup guide           |
 | Licensing    | [LICENSES.md](LICENSES.md)      | Full dependency licenses + commercial use      |
 | Architecture | [architecture.md](docs/architecture.md) | System diagrams + component breakdown          |
-| Testing      | [Completion_And_Validation.md](docs/Completion_And_Validation.md)   | test results + performance metrics       |
+| Testing & Results | [Completion_And_Validation.md](docs/Completion_And_Validation.md)   | test results + performance metrics       |
 | Verification | [verification.md](docs/verification.md) | Completion certificate + checklist             |
 
 ---
@@ -152,7 +152,7 @@ textagentforge/
 
 1. [REPRODUCIBILITY.md](REPRODUCIBILITY.md) – Get it running  
 2. [architecture.md](docs/architecture.md) – Understand the system  
-3. [completetion_and_vadilation.md](docs/completetion_and_vadilation.md) – See performance  
+3. [completetion_and_vadilation.md](docs/completetion_and_vadilation.md) – See performance, metris & results  
 4. [LICENSES.md](LICENSES.md) – Legal & commercial use  
 
 ### Advanced Topics
