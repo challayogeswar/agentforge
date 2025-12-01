@@ -34,11 +34,11 @@ Version: v1.0.0
 
 | Module                | Tests | Passed | Quality | Avg Time | Source Path   |
 |-----------------------|-------|--------|---------|----------|---------------|
-| Prompt Optimizer      | 4     | 4/4    | 9.13    | 2.32s    |               |
-| Content Optimizer     | 5     | 5/5    | 9.30    | 2.69s    |               |
-| Email Prioritizer     | 5     | 5/5    | 9.30    | 2.64s    |               |
+| Prompt Optimizer      | 4     | 4/4    | 9.13    | 2.32s    | test_results/prompt_optimizer/test_results.json |
+| Content Optimizer     | 5     | 5/5    | 9.30    | 2.69s    | test_results/content_optimizer/test_results.json |
+| Email Prioritizer     | 5     | 5/5    | 9.30    | 2.64s    | test_results/email_prioritizer/test_results.json |
 | Intent Router         | 3     | 3/3    | 9.50    | 0.12s    |               |
-| End-to-End Integration| 3     | 3/3    | 9.20    | 7.82s    |               |
+| End-to-End Integration| 3     | 3/3    | 9.20    | 7.82s    |data/test_metrics_full.json |
 | TOTAL                 | 20    | 20     | 9.24    | 2.55s    |               |
 
 ---
